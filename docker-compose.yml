@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  db:
+    image: bitnami/postgresql
+    restart: always
+    ports:
+      - "54332:5432"
+    environment:
+      POSTGRESQL_USER: root
+      POSTGRESQL_PASSWORD: root
+      POSTGRESQL_DATABASE: tiktok_rest
+
+  api:
+    depends_on:
+      - db
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://root:root@db:5432/tiktok_rest
+      API_KEY: 'change-me'
+      SECRET_KEY: 'bad-secret'
+    # env_file:
+    #   - .env
+
